@@ -11,6 +11,7 @@
 		4D8AD0D4286E800000C4E95F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AD0D3286E800000C4E95F /* ContentView.swift */; };
 		4D8AD0D6286E800000C4E95F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D8AD0D5286E800000C4E95F /* Assets.xcassets */; };
 		4D8AD0D9286E800000C4E95F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D8AD0D8286E800000C4E95F /* Preview Assets.xcassets */; };
+		4D8AD0E0286E804500C4E95F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AD0DF286E804500C4E95F /* GameScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		4D8AD0D3286E800000C4E95F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4D8AD0D5286E800000C4E95F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D8AD0D8286E800000C4E95F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4D8AD0DF286E804500C4E95F /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				4D8AD0D1286E800000C4E95F /* spritekit_studyApp.swift */,
 				4D8AD0D3286E800000C4E95F /* ContentView.swift */,
+				4D8AD0DF286E804500C4E95F /* GameScene.swift */,
 				4D8AD0D5286E800000C4E95F /* Assets.xcassets */,
 				4D8AD0D7286E800000C4E95F /* Preview Content */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D8AD0E0286E804500C4E95F /* GameScene.swift in Sources */,
 				4D8AD0D4286E800000C4E95F /* ContentView.swift in Sources */,
 				4D8AD0D2286E800000C4E95F /* spritekit_studyApp.swift in Sources */,
 			);
