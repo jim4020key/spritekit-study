@@ -7,6 +7,13 @@
 
 import SpriteKit
 
+struct PhysicsCategory {
+    static let none      : UInt32 = 0
+    static let all       : UInt32 = UInt32.max
+    static let monster   : UInt32 = 0b1       // 1
+    static let projectile: UInt32 = 0b10      // 2
+}
+
 func +(left: CGPoint, right: CGPoint) -> CGPoint {
     return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
@@ -53,6 +60,9 @@ class GameScene: SKScene {
                 SKAction.wait(forDuration: 1.0)
             ])
         ))
+        
+        physicsWorld.gravity = .zero
+        physicsWorld.contactDelegate = self
     }
     
     func random() -> CGFloat {
@@ -77,6 +87,12 @@ class GameScene: SKScene {
                                        duration: TimeInterval(actualDuration))
         let actionMoveDone = SKAction.removeFromParent()
         monster.run(SKAction.sequence([actionMove, actionMoveDone]))
+        
+        monster.physicsBody = SKPhysicsBody(rectangleOf: monster.size)
+        monster.physicsBody?.isDynamic = true
+        monster.physicsBody?.categoryBitMask = PhysicsCategory.monster
+        monster.physicsBody?.contactTestBitMask = PhysicsCategory.projectile
+        monster.physicsBody?.collisionBitMask = PhysicsCategory.none
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -96,5 +112,40 @@ class GameScene: SKScene {
         let actionMove = SKAction.move(to: realDest, duration: 2.0)
         let actionMoveDone = SKAction.removeFromParent()
         projectile.run(SKAction.sequence([actionMove, actionMoveDone]))
+        
+        projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width/2)
+        projectile.physicsBody?.isDynamic = true
+        projectile.physicsBody?.categoryBitMask = PhysicsCategory.projectile
+        projectile.physicsBody?.contactTestBitMask = PhysicsCategory.monster
+        projectile.physicsBody?.collisionBitMask = PhysicsCategory.none
+        projectile.physicsBody?.usesPreciseCollisionDetection = true
+    }
+    
+    func projectileDidCollideWithMonster(projectile: SKSpriteNode, monster: SKSpriteNode) {
+        print("Hit")
+        projectile.removeFromParent()
+        monster.removeFromParent()
+    }
+}
+
+extension GameScene: SKPhysicsContactDelegate {
+    func didBegin(_ contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if ((firstBody.categoryBitMask & PhysicsCategory.monster != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.projectile != 0)) {
+            if let monster = firstBody.node as? SKSpriteNode,
+               let projectile = secondBody.node as? SKSpriteNode {
+                projectileDidCollideWithMonster(projectile: projectile, monster: monster)
+            }
+        }
     }
 }
