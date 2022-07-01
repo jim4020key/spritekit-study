@@ -48,6 +48,7 @@ extension CGPoint {
 
 class GameScene: SKScene {
     let player = SKSpriteNode(imageNamed: "player")
+    var monstersDestroyed = 0
     
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.white
@@ -69,8 +70,9 @@ class GameScene: SKScene {
         addChild(backgroundMusic)
     }
     
+    //https://stackoverflow.com/questions/55560770/swift-randomfloat-issue-4294967295-is-not-exactly-representable-as-float
     func random() -> CGFloat {
-        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+        return CGFloat(Float(arc4random()) / Float(0xFFFFFFFF))
     }
     
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
@@ -90,7 +92,13 @@ class GameScene: SKScene {
         let actionMove = SKAction.move(to: CGPoint(x: -monster.size.width/2, y: actualY),
                                        duration: TimeInterval(actualDuration))
         let actionMoveDone = SKAction.removeFromParent()
-        monster.run(SKAction.sequence([actionMove, actionMoveDone]))
+        let loseAction = SKAction.run() { [weak self] in
+            guard let `self` = self else { return }
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            let gameOverScene = GameOverScene(size: self.size, won: false)
+            self.view?.presentScene(gameOverScene, transition: reveal)
+        }
+        monster.run(SKAction.sequence([actionMove, loseAction, actionMoveDone]))
         
         monster.physicsBody = SKPhysicsBody(rectangleOf: monster.size)
         monster.physicsBody?.isDynamic = true
@@ -130,6 +138,13 @@ class GameScene: SKScene {
         print("Hit")
         projectile.removeFromParent()
         monster.removeFromParent()
+        
+        monstersDestroyed += 1
+        if monstersDestroyed > 5 {
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            let gameOverScene = GameOverScene(size: self.size, won: true)
+            view?.presentScene(gameOverScene, transition: reveal)
+        }
     }
 }
 
