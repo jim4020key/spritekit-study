@@ -12,14 +12,12 @@ struct ContentView: View {
     
     var scene: SKScene {
         let scene = GameScene()
-        scene.size = CGSize(width: 216, height: 216)
-        scene.scaleMode = .fill
+        scene.scaleMode = .resizeFill
         return scene
     }
     
     var body: some View {
         SpriteView(scene: self.scene)
-            .frame(width: 256, height: 256)
             .ignoresSafeArea()
     }
 }
