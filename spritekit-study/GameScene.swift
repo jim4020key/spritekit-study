@@ -63,6 +63,10 @@ class GameScene: SKScene {
         
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
+        
+        let backgroundMusic = SKAudioNode(fileNamed: "background-music-aac.caf")
+        backgroundMusic.autoplayLooped = true
+        addChild(backgroundMusic)
     }
     
     func random() -> CGFloat {
@@ -99,6 +103,7 @@ class GameScene: SKScene {
         guard let touch = touches.first else {
             return
         }
+        run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
         let touchLocation = touch.location(in: self)
         let projectile = SKSpriteNode(imageNamed: "projectile")
         projectile.position = player.position
